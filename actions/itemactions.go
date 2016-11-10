@@ -14,11 +14,11 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 	case item1.Name == "phone":
 		switch action {
 		case 0:
-			fmt.Println("You attempt to call and only hear dial tone. There is no reception.")
+			fmt.Println("You attempt to call and hear only silence. There is no reception.")
 		case 1:
-			fmt.Println("You attempt to call and only hear dial tone. There is no reception.")
+			fmt.Println("You attempt to call and hear only silence. There is no reception.")
 		case 2:
-			fmt.Println("You attempt to call and only hear dial tone. There is no reception.")
+			fmt.Println("You attempt to call and hear only silence. There is no reception.")
 		default:
 			fmt.Println("OK")
 		}
@@ -229,9 +229,9 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 			fmt.Println("You get under the stained covers. It's surprisingly comfortable. Soon you are in dreamland.")
 			cm := models.Spawnmonsterget()
 			if cm.Spawn == false {
-				fmt.Println("You awake after a few hours of nightmare-ridden sleep.")
+				fmt.Println("You wake up after a few hours of nightmare-ridden sleep.")
 			} else {
-				fmt.Println("You do not awake when the", cm.Name, "other enters the room.\nYou awake when they are standing next to your bed. And you are vulnerable as a babe.")
+				fmt.Println("You do not wake up when the", cm.Name, "enters the room.\nYou wake up when they are standing next to your bed. And you are vulnerable as a babe.")
 				cp.Health = 0
 			}
 		case 1:
@@ -334,7 +334,7 @@ func hide(cp models.Player, cm models.Monster, item1 models.Item) (models.Player
 				rzi := models.ItemGet("rusty straight razor")
 				switch {
 				case rzi.Loc == 20:
-					fmt.Println("You try to slit his throat. The blood spills hot and fast onto your hand." +
+					fmt.Println("You try to slit his throat with the razor. The blood spills hot and fast onto your hand." +
 						"\nHe screams and frantically strikes behind him. He manages to push you off." +
 						"\nHe flees the room. One hand on his chainsaw, the other holding his bleeding throat.")
 					cm.Health = cm.Health - 60

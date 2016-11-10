@@ -11,7 +11,7 @@ import (
 func Midgame(cp models.Player) models.Player {
 
 	//For testing things
-	actions.Test1()
+	//actions.Test1()
 
 	//check current position and return options
 

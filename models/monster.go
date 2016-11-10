@@ -22,7 +22,7 @@ var (
 	//psycho
 	i1 = "He stands in the wreckage of your cabin door. A bearded man in red flannel." +
 		"\nA fever in his eyes. And a massive chainsaw in his arms.\nHe doesn't say a word, just strides towards you."
-	om1 = "He is down. He doesn't get up. He was only a man and you defeated him.\nHis lust for killing cannot overcome his mortality."
+	om1 = "He falls to the floor. He doesn't get up. He was only a man and you defeated him.\nHis lust for killing cannot overcome his mortality."
 	op1 = "The chainsaw rips through your flesh. Bones shred beneath the spinning blades. You can feel it emerging again on the other side." +
 		"\nThere is no recovering from this. No more fight. He has won."
 	f1 = "You see the man. He sees you. The chainsaw roars to life."
