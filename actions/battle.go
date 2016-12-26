@@ -33,7 +33,7 @@ func battle(cp models.Player, cm models.Monster) (models.Player, models.Monster)
 		cp, cm = Useitembattle(item1, cp, cm)
 	case r1 == 2:
 		fmt.Println("1.Hello\n2.Who are you?\n3.What are you doing here?\n4.Why?")
-		inputs.Basicinput(s1) //no need for a response now
+		r2 := inputs.Basicinput(s1)
 		switch cm.Number {
 		case 1: //for pyscho, he doesn't care to talk
 			fmt.Println("He lets his chainsaw do the talking. It says \"Fuck You\" and cuts your arm.")
@@ -41,12 +41,25 @@ func battle(cp models.Player, cm models.Monster) (models.Player, models.Monster)
 		case 2:
 			fmt.Println("The wolf cocks its head to the side. Like it's listening.")
 			fmt.Println("Cautiously extend your hand?\n1.Palm up\n2.Palm down\n3.No, do not do this")
-			r2 := inputs.Basicinput("?")
-			if r2 == 1 || r2 == 2 {
+			r3 := inputs.Basicinput("?")
+			if r3 == 1 || r3 == 2 {
 				fmt.Println("You place your hand out. The wolf sniffs it. Licks it. Eats it. You have one less hand now.")
 				cp.Health = cp.Health - d3
 			} else {
 				fmt.Println("The wolf licks its lips and stares at you.")
+			}
+		case 3:
+			switch r2 {
+			case 1:
+				fmt.Println("\"Greetings\"")
+			case 2:
+				fmt.Println("\"Ho ho ho\"")
+			case 3:
+				fmt.Println("\"Tis the season.\"")
+			case 4:
+				fmt.Println("\"You know why.\"")
+			default:
+				fmt.Println("\"Ho ho ho\"")
 			}
 		default:
 			fmt.Println("This monster has nothing to say. He looks at you. Oddly.")
@@ -259,15 +272,15 @@ func Useitembattle(item1 models.Item, cp models.Player, cm models.Monster) (mode
 			fmt.Println(item1.Name, "Has no impact on this monster.")
 		}
 		/*
-			case item1.Name == "":
-				switch cm.Number{
-				case 1:
-				fmt.Println("")
-				case 2:
-				fmt.Println("")
+							case item1.Name == "":
+							switch cm.Number{
+						case 1:
+						fmt.Println("")
+					case 2:
+					fmt.Println("")
 				default:
 				fmt.Println(item1.Name, "Has no impact on this monster.")
-				}
+			}
 		*/
 
 	default:

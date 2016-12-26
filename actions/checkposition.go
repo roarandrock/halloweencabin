@@ -89,6 +89,15 @@ func Spawncheck(np models.Player) {
 			} else {
 				fmt.Println("Staying in this cabin alone is hungry work. Your stomach is growling.")
 			}
+		case 3:
+			bell := models.ItemGet("silver bell")
+			if bell.Toggle == false {
+				Monsterspawn()
+				cm = models.Chosenmonsterget()
+				cm.Position = 3
+			} else {
+				fmt.Println("With the snow falling outside, you hope it will be a white Christmas this year.")
+			}
 		default:
 			fmt.Println("Nothing evil lurks in these woods.")
 		}

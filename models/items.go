@@ -48,6 +48,8 @@ func Iset(np Player) {
 	cross := Item{"silver cross", 5, true, []string{"Eat"}, false, true}
 	plunger := Item{"red plunger", 6, true, []string{"Plunge with"}, false, true}
 	razor := Item{"rusty straight razor", 6, true, []string{"Shave with"}, false, true}
+	bell := Item{"silver bell", 4, false, []string{"Ring"}, false, true}
+	present := Item{"present", 10, false, []string{"Open", "Set on fire"}, false, true}
 
 	//for creating initial map
 	Itemupdate(phone)
@@ -66,6 +68,8 @@ func Iset(np Player) {
 	Itemupdate(cross)
 	Itemupdate(plunger)
 	Itemupdate(razor)
+	Itemupdate(bell)
+	Itemupdate(present)
 }
 
 //Inventory returns item map

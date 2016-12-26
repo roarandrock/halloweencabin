@@ -2,10 +2,12 @@
 Author: roarandrock
 Short term:
 
-added feature where the monster moves right next to the player. However, this automatically places the monster in the living room
-when player is in the kitchen...I'll turn it off for now.
+Added Santa. Need to implement battle with him now.
+
 
 long term:
+7. Monster outro playing when player kills themselves. Should change where it goes in the loop.
+Need to pass back game over toggle and reason for ending through all actions to the main loop.
 8. fixed monster resetting, can refactor the monster calls
 9. add new basic input function for yes/no, autmoatically makes 1. Yes 2. No. And one for 1,2 statements maybe?
 10.can go over 100 with health for player, need to cap

@@ -41,12 +41,13 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 	case item1.Name == "front door":
 		switch action {
 		case 0:
-			if item1.Toggle == true {
+			switch item1.Toggle {
+			case true:
 				fmt.Println("You open the front door. Get a whiff of that nature.")
 				item1.Toggle = false
-			}
-			if item1.Toggle == false {
+			case false:
 				fmt.Println("You close the front door. Generates a false sense of security.")
+				item1.Toggle = true
 			}
 		case 1:
 			switch item1.Toggle {
@@ -231,8 +232,16 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 			if cm.Spawn == false {
 				fmt.Println("You wake up after a few hours of nightmare-ridden sleep.")
 			} else {
-				fmt.Println("You do not wake up when the", cm.Name, "enters the room.\nYou wake up when they are standing next to your bed. And you are vulnerable as a babe.")
-				cp.Health = 0
+				switch cm.Number {
+				case 3:
+					fmt.Println("The morning light pierces the window and wakes you. That was a deep sleep." +
+						"On your chest, sits a present.")
+					cp = present(cp)
+					cp.Continue = false
+				default:
+					fmt.Println("You do not wake up when the", cm.Name, "enters the room.\nYou wake up when they are standing next to your bed. And you are vulnerable as a babe.")
+					cp.Health = 0
+				}
 			}
 		case 1:
 			fmt.Println("You hide under the bed. It's just you, the spiders and broken toys.")
@@ -242,7 +251,7 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 				cp.Charisma = cp.Charisma - 15
 			} else {
 				//make and call hide function, can be useful elswhere
-				cp, item1 = hide(cp, cm, item1) //only works once.
+				cp, item1 = hide(cp, cm, item1)
 			}
 		default:
 			fmt.Println("OK")
@@ -301,13 +310,56 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 		default:
 			fmt.Println("OK")
 		}
+	case item1.Name == "silver bell":
+		switch action {
+		case 0:
+			fmt.Println("The bell rings bizarrely loud. When you stop, silence. Outside the snow falls heavily.")
+			item1.Toggle = false
+		default:
+			fmt.Println("OK")
+		}
+	case item1.Name == "present":
+		switch action {
+		case 0:
+			fmt.Println("Do you open the present: \n1. Carefully\n2. Hastily")
+			r1 := inputs.Basicinput("?")
+			switch r1 {
+			case 1:
+				fmt.Println("Carefully you unwrap the present, not damaging the pretty paper.")
+				cp.Charisma = cp.Charisma - 10
+			case 2:
+				fmt.Println("You tear through the paper with glee.")
+				cp.Charisma = cp.Charisma + 10
+			default:
+				fmt.Println("OK")
+			}
+			fmt.Println("Inside the box you find a sprig of mistletoe." +
+				"\nDo you want to:\n1.Hang it\n2. Eat it\n3. Carry it\n4. Burn it") //make it a carriable weapon? or something else?
+			r2 := inputs.Basicinput("?")
+			switch r2 {
+			case 1:
+			case 2:
+				fmt.Println("Tasty but ")
+			case 3:
+			case 4:
+				fmt.Println("Using your innate pyromaniac skills, you manage to set the present on fire. It disappears in flame and smoke.")
+				cp = fire(cp)
+			default:
+				fmt.Println("OK")
+			}
+		case 1:
+			fmt.Println("Using your innate pyromaniac skills, you manage to set the present on fire. It disappears in flame and smoke.")
+			cp = fire(cp)
+		default:
+			fmt.Println("OK")
+		}
 		/*
-			case item1.Name == :
-				switch action{
-				case 0:
+						case item1.Name == :
+						switch action{
+					case 0:
 				default:
-					fmt.Println("OK")
-				}
+				fmt.Println("OK")
+			}
 		*/
 	default:
 		fmt.Println("Surprisingly, it does not do anything")
@@ -370,6 +422,15 @@ func hide(cp models.Player, cm models.Monster, item1 models.Item) (models.Player
 		cp.Health = cp.Health - 30
 		cm.Health = cm.Health - 10
 		cm = Mrun(cp, cm)
+	case 3: //Santa finds you, knocks you out, removes your items?
+		fmt.Println("You watch the door patiently. Waiting for any sign of the man in red." +
+			"Time passes. You succumb to a supernatural urge to sleep." +
+			"When you wake, you are in the living room. A present lies on the floor in front of you.")
+		cp.Position = 1
+		cp = present(cp)
+		cm = Mrun(cp, cm)
+	default:
+		fmt.Println("Nothing happens. You get bored and make the odd decision to leave your safe hiding place.")
 	}
 	models.Monsterupdate(cm)
 	return cp, item1
@@ -509,6 +570,15 @@ func fire(cp models.Player) models.Player {
 					"\nFire doesn't stop werewolves. It lunges. Teeth wrapped in smoke and burning hair.")
 				//fmt.Println(cm.Outrop) Not needed. Need the monster death text but not the player
 				cp.Health = 0
+			case 3:
+				fmt.Println("The fire transforms the cabin into a bonfire. There's no way the monster could survive it." +
+					"\nYou start walking away. Plotting how to get home. You see a deer. It has large antlers." +
+					"\nSuddenly you are on the ground. You did not see the other deer before. There are more then a few." +
+					"\nYou cannot count them because they are stomping on your body with their hooves. Your bones break and organs turn into mush." +
+					"\nThe beasts ignore your screams. One of them bends over and starts chewing on your lips." +
+					"\nThat's enough. With heroic effort you beat them off for a second. You get to your feet and start running." +
+					"\nBehind you, you hear the bearded man's laugh, \n\"Ho ho ho\"")
+				cp.Health = 0
 			default:
 				fmt.Println("Nothing specific happens. Oddly. The fire does not kill the monster. Monster kills you. Game over!")
 				cp.Health = 0
@@ -524,5 +594,15 @@ func fire(cp models.Player) models.Player {
 		cp.Health = 0
 
 	}
+	return cp
+}
+
+//do we need a function or can just make a new item?
+func present(cp models.Player) models.Player {
+	present := models.ItemGet("present")
+	present.Loc = cp.Position
+	//what's in the present? His heart maybe? Or something evil? Mistletoe?
+	//is it random? let's start with just Mistletoe
+	models.Itemupdate(present)
 	return cp
 }

@@ -189,6 +189,10 @@ func Usecheck(cp models.Player) models.Player {
 	fmt.Println(i4+2, ": None of that")
 	r2 := inputs.Basicinput("?")
 	upitem, cp = Useitem(upitem, r2-1, cp)
+	if cp.Health <= 0 {
+		cp.Continue = false
+		return cp 
+	}
 	models.Itemupdate(upitem)
 	cm := models.Spawnmonsterget() //checks if spawned monster is met
 	if cm.Spawn == true {
