@@ -90,7 +90,7 @@ func Spawncheck(np models.Player) {
 				fmt.Println("Staying in this cabin alone is hungry work. Your stomach is growling.")
 			}
 		case 3:
-			bell := models.ItemGet("silver bell")
+			bell := models.ItemGet("tiny bell")
 			if bell.Toggle == false {
 				Monsterspawn()
 				cm = models.Chosenmonsterget()

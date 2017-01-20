@@ -12,6 +12,7 @@ Need to pass back game over toggle and reason for ending through all actions to 
 9. add new basic input function for yes/no, autmoatically makes 1. Yes 2. No. And one for 1,2 statements maybe?
 10.can go over 100 with health for player, need to cap
 11. Encumberance and losing hands to the wolf
+12. specific damage to body parts
 add basement with zombies later, need a room updated similar to monsters/items, or can add a door item to be checked
 make an attack function. Just handles damage and stuff. can use outside of battle loop then. Only use battle items for specific things
 need item descriptions

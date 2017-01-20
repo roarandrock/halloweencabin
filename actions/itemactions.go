@@ -237,7 +237,7 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 					fmt.Println("The morning light pierces the window and wakes you. That was a deep sleep." +
 						"On your chest, sits a present.")
 					cp = present(cp)
-					cp.Continue = false
+					item1.Used = true
 				default:
 					fmt.Println("You do not wake up when the", cm.Name, "enters the room.\nYou wake up when they are standing next to your bed. And you are vulnerable as a babe.")
 					cp.Health = 0
@@ -261,6 +261,7 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 		case 0:
 			fmt.Println("It's an old cross on a necklace. You eat it. It's gone forever.")
 			item1.Used = true
+			item1.Loc = 40
 		default:
 			fmt.Println("OK")
 		}
@@ -310,11 +311,18 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 		default:
 			fmt.Println("OK")
 		}
-	case item1.Name == "silver bell":
+	case item1.Name == "tiny bell":
 		switch action {
 		case 0:
-			fmt.Println("The bell rings bizarrely loud. When you stop, silence. Outside the snow falls heavily.")
-			item1.Toggle = false
+			cm := models.Spawnmonsterget()
+			if cm.Number == 3 {
+				fmt.Println("The bell rings bizarrely loud. When you stop, silence. Outside the snow falls heavily.")
+				item1.Toggle = false
+				item1.Used = true
+			} else {
+				fmt.Println("The bell rings weak and dissonant. It's the wrong season for this.")
+				item1.Used = true
+			}
 		default:
 			fmt.Println("OK")
 		}
@@ -327,32 +335,102 @@ func Useitem(item1 models.Item, action int, cp models.Player) (models.Item, mode
 			case 1:
 				fmt.Println("Carefully you unwrap the present, not damaging the pretty paper.")
 				cp.Charisma = cp.Charisma - 10
+				item1.Used = true
 			case 2:
 				fmt.Println("You tear through the paper with glee.")
 				cp.Charisma = cp.Charisma + 10
+				item1.Used = true
 			default:
 				fmt.Println("OK")
+				item1.Used = true
 			}
-			fmt.Println("Inside the box you find a sprig of mistletoe." +
-				"\nDo you want to:\n1.Hang it\n2. Eat it\n3. Carry it\n4. Burn it") //make it a carriable weapon? or something else?
-			r2 := inputs.Basicinput("?")
-			switch r2 {
-			case 1:
-			case 2:
-				fmt.Println("Tasty but ")
-			case 3:
-			case 4:
-				fmt.Println("Using your innate pyromaniac skills, you manage to set the present on fire. It disappears in flame and smoke.")
-				cp = fire(cp)
-			default:
-				fmt.Println("OK")
-			}
+			//for now, make a heart
+			hitem := models.ItemGet("heart")
+			hitem.Loc = 20
+			fmt.Println("Inside the box you find an organ. A shriveled and bloody beating heart." +
+				"\nYou are compelled to pocket it.")
+			models.Itemupdate(hitem)
 		case 1:
 			fmt.Println("Using your innate pyromaniac skills, you manage to set the present on fire. It disappears in flame and smoke.")
 			cp = fire(cp)
 		default:
 			fmt.Println("OK")
 		}
+	case item1.Name == "heart":
+		cm := models.Spawnmonsterget()
+		switch action {
+		case 0:
+			fmt.Println("You place the pulsing heart on the floor. With relish, you step on it." +
+				"\nIt squeaks, like a rubber chew toy.")
+			cm.Position = cp.Position
+			item1.Loc = cp.Position
+		case 1:
+			fmt.Println("You bite into the flesh. Blood runs down your chin like juice from a succulent peach." +
+				"\nBut this tastes nothing like a peach. It tastes like a pig only fed black licorice and tears." +
+				"\nYou get a vision, you know where your foe is.")
+			fmt.Println("He is in the " + models.RoomGet(cm.Position).Name)
+			cp.Charisma = cp.Charisma - 25
+		case 2:
+			razeri := models.ItemGet("rusty straight razor")
+			axei := models.ItemGet("axe")
+			glassi := models.ItemGet("glass shards")
+			if razeri.Loc == 20 || razeri.Loc == cp.Position {
+				fmt.Println("You slice the heart with the rusty razor. From the cut seeps thick, black blood.")
+				fmt.Println("The blood corrodes the blade and renders it unusable.")
+				razeri.Used = true
+				cm.Health = cm.Health - 33
+				cm.Position = cp.Position
+			} else if axei.Loc == 20 || axei.Loc == cp.Position {
+				fmt.Println("You cut the heart with the axe blade. You cannot cut it in half but you make a bloody mess.")
+				fmt.Println("The blood corrodes the blade and renders it unusable.")
+				axei.Used = true
+				cm.Health = cm.Health - 33
+				cm.Position = cp.Position
+			} else if glassi.Loc == 20 || glassi.Loc == cp.Position {
+				fmt.Println("You stab the heart with shards of glass. It is bloody brutal work.")
+				fmt.Println("The blood corrodes the blade and renders it unusable.")
+				glassi.Used = true
+				cm.Health = cm.Health - 33
+				cm.Position = cp.Position
+			} else {
+				fmt.Println("You have nothing sharp. You poke at it with your fingers to no effect.")
+			}
+			models.Itemupdate(razeri)
+			models.Itemupdate(axei)
+			models.Itemupdate(glassi)
+			if cm.Health <= 0 {
+				cp.Continue = false
+				fmt.Println(cm.Outrom)
+			}
+		case 3:
+			skilleti := models.ItemGet("skillet")
+			if cp.Position == 2 {
+				if skilleti.Loc == 20 || skilleti.Loc == 2 {
+					fmt.Println("Using the skillet and stove you cook the heart." +
+						"\nBubbles appear across its surface. They pop releasing toxic smoke in the room." +
+						"\nYou hear the man screaming." +
+						"\nThe heart is gone and the skillet is ruined.")
+					if cp.Health > 10 {
+						cp.Health = cp.Health - 10
+					}
+					cm.Health = cm.Health - 75
+					skilleti.Used = true
+					item1.Used = true
+				} else {
+					fmt.Println("You lack cookery.")
+				}
+			} else {
+				fmt.Println("Not a good place to cook.")
+			}
+			models.Itemupdate(skilleti)
+			if cm.Health <= 0 {
+				cp.Continue = false
+				fmt.Println(cm.Outrom)
+			}
+		default:
+			fmt.Println("OK")
+		}
+		models.Monsterupdate(cm)
 		/*
 						case item1.Name == :
 						switch action{
@@ -422,13 +500,14 @@ func hide(cp models.Player, cm models.Monster, item1 models.Item) (models.Player
 		cp.Health = cp.Health - 30
 		cm.Health = cm.Health - 10
 		cm = Mrun(cp, cm)
-	case 3: //Santa finds you, knocks you out, removes your items?
+	case 3: //Santa finds you and gives you a present
 		fmt.Println("You watch the door patiently. Waiting for any sign of the man in red." +
 			"Time passes. You succumb to a supernatural urge to sleep." +
 			"When you wake, you are in the living room. A present lies on the floor in front of you.")
 		cp.Position = 1
 		cp = present(cp)
 		cm = Mrun(cp, cm)
+		item1.Used = true
 	default:
 		fmt.Println("Nothing happens. You get bored and make the odd decision to leave your safe hiding place.")
 	}
@@ -533,6 +612,7 @@ func cook(cp models.Player, item1 models.Item) (models.Player, models.Item) {
 	models.Itemupdate(bi)
 	models.Itemupdate(gsi)
 	models.Itemupdate(ski)
+	models.Itemupdate(cri)
 	item1 = models.ItemGet(item1.Name)
 	return cp, item1
 }

@@ -34,23 +34,23 @@ var (
 	op2 = "You try to hold the monster back and you fail. Its teeth sink into your shoulder. Mercifully you lose conciousness as it starts to eat your face."
 	f2  = "There in the shadows, the wolf. The howl is close, loud and terrifying."
 	//santa
-	i3 = "You see a man. He wears an unwashed red suit, crusted with dirt and covered in mystery stains."+
-	"\nSmall beady black eyes poke out from beneath a bright red cap. Watching you."+
-	"\nA knotted white beard stretching halfway to the floor. Over his back a large burlap sack, also stained and squirming."+
-	"\nHe reaches into the sack and pulls out a butcher knife."
-	om3 = "He stands before you. Red blood running down white beard. He grins. He chortles. His belly shakes."+
-	"\nHe twinkles his nose. He vomits blood on the floor. A sudden flurry of snow rushes through the room. And he's gone."+
-	"\nYou live to see another year. The echoes of his laughter fill your mind."
-	op3 = "The butcher knife bites deep. You see your right arm hit the floor. His laughter fills your head. The knife strikes again."+
-	"\nYou fall. Cannot get back up. You see the man bend over, pick up your arm and place it in his sack."+
-	"\nHe hovers over you. The laugher doesn't stop. The knife doesn't stop. You lose conciousness when he starts dissecting your chest."
+	i3 = "You see a man. He wears an unwashed red suit, crusted with dirt and covered in mystery stains." +
+		"\nSmall beady black eyes poke out from beneath a bright red cap. Watching you." +
+		"\nA knotted white beard stretching halfway to the floor. Over his back a large burlap sack, also stained and squirming." +
+		"\nHe reaches into the sack and pulls out a butcher knife."
+	om3 = "He stands before you. Red blood running down white beard. He grins. He chortles. His belly shakes." +
+		"\nHe twinkles his nose. He vomits blood on the floor. A sudden flurry of snow rushes through the room. And he's gone." +
+		"\nYou live to see another year. The echoes of his laughter fill your mind."
+	op3 = "The butcher knife bites deep. You see your right arm hit the floor. His laughter fills your head. The knife strikes again." +
+		"\nYou see the man bend over, pick up your arm and place it in his sack." +
+		"\nThe laugher doesn't stop. The knife doesn't stop. You lose conciousness when he starts dissecting your chest."
 	f3 = "In the corner, you see a glow. Stepping out from the shadows is the bearded man. A lit pipe in his mouth and butcher knife in his hand."
 )
 
 var (
 	psychopath = Monster{"dude with a chainsaw", 100, 75, 1, false, false, 1, i1, om1, op1, false, f1} //items do different damage, so don't mess with health now
 	werewolf   = Monster{"werewolf", 100, 10, 1, false, false, 2, i2, om2, op2, false, f2}
-	santa = Monster{"dude in a red suit with white trim",100,100,1,false,false,3,i3,om3,op3,false,f3}
+	santa      = Monster{"dude in a red suit with white trim", 100, 100, 1, false, false, 3, i3, om3, op3, false, f3}
 	//tiny respawning aliens - critters
 	//demon, hellspawn,zombie
 	chosenmonster = Monster{}
@@ -59,14 +59,14 @@ var (
 var mstart = map[string]Monster{
 	psychopath.Name: psychopath,
 	werewolf.Name:   werewolf,
-	santa.Name: santa,
+	santa.Name:      santa,
 	//chosenmonster.Name: chosenmonster,
 }
 
 var mmap = map[string]Monster{
 	psychopath.Name: psychopath,
 	werewolf.Name:   werewolf,
-	santa.Name: santa,
+	santa.Name:      santa,
 	//chosenmonster.Name: chosenmonster,
 }
 
@@ -174,8 +174,9 @@ func Monsterhealth(cm Monster) {
 //Mset sets the defaults for the monster, need to only set up stats, location after spawn
 func Mset(np Player) {
 	Mcreate(np)
-	mpos := Mpos()       //random position in house
-	mchoose := Mchoice() // returns int for randomly chosen monster
+	mpos := Mpos() //random position in house
+	//mchoose := Mchoice() // returns int for randomly chosen monster
+	mchoose := 2 //for testing specific monster
 	var cname string
 	for _, v := range mstart {
 		if v.Number == mchoose {
